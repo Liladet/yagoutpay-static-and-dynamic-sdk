@@ -10,8 +10,8 @@ app = Flask(__name__)
 
 # Initialize SDK
 sdk = YagoutPaySDK(
-    merchant_id="202508080001",
-    encryption_key="IG3CNW5uNrUO2mU2htUOWb9rgXCF7XMAXmL63d7wNZo="
+    merchant_id="me id",
+    encryption_key="aes key"
 )
 
 @app.route('/')
