@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YagoutPay Payment Link Generator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .success {
+            background-color: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .payment-link {
+            word-break: break-all;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            font-family: monospace;
+            border-left: 4px solid #28a745;
+        }
+        
+        .open-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        
+        .open-link:hover {
+            transform: translateY(-2px);
+        }
+        
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-size: 18px;
+            padding: 20px;
+        }
+        
+        .feature-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .feature-list h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .feature-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .feature-list li {
+            padding: 5px 0;
+            color: #666;
+        }
+        
+        .feature-list li:before {
+            content: "✓ ";
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💰 YagoutPay Payment Link Generator</h1>
+        
+        <form id="paymentForm">
+            <div class="form-group">
+                <label for="first_name">First Name *</label>
+                <input type="text" id="first_name" name="first_name" required placeholder="Enter first name">
+            </div>
+            
+            <div class="form-group">
+                <label for="last_name">Last Name *</label>
+                <input type="text" id="last_name" name="last_name" required placeholder="Enter last name">
+            </div>
+            
+            <div class="form-group">
+                <label for="customer_email">Email</label>
+                <input type="email" id="customer_email" name="customer_email" placeholder="Enter email (optional)">
+            </div>
+            
+            <div class="form-group">
+                <label for="mobile_no">Mobile Number *</label>
+                <input type="text" id="mobile_no" name="mobile_no" required placeholder="Enter mobile number">
+            </div>
+            
+            <div class="form-group">
+                <label for="amount">Amount (ETB) *</label>
+                <input type="number" id="amount" name="amount" required min="1" placeholder="Enter amount">
+            </div>
+            
+            <div class="form-group">
+                <label for="product">Product/Service *</label>
+                <input type="text" id="product" name="product" required placeholder="Enter product name">
+            </div>
+            
+            <div class="form-group">
+                <label for="order_id">Order ID *</label>
+                <input type="text" id="order_id" name="order_id" required readonly>
+            </div>
+            
+            <button type="submit" id="submitBtn">Generate Payment Link</button>
+        </form>
+        
+        <div id="loading" class="loading" style="display: none;">
+            <div>⏳ Creating your payment link...</div>
+        </div>
+        
+        <div id="result" class="result"></div>
+        
+        <div class="feature-list">
+            <h3>✨ Features</h3>
+            <ul>
+                <li>Instant payment link generation</li>
+                <li>Secure payment processing</li>
+                <li>Mobile-friendly interface</li>
+                <li>Real-time status updates</li>
+                <li>Test environment ready</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('paymentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const resultDiv = document.getElementById('result');
+            
+            // Generate unique order ID
+            const orderIdInput = document.getElementById('order_id');
+            orderIdInput.value = 'ORDER_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Show loading, hide button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Generating...';
+            loading.style.display = 'block';
+            resultDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch('/create-payment-link', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h3>✅ Payment Link Created Successfully!</h3>
+                        <p><strong>Customer:</strong> ${data.first_name} ${data.last_name}</p>
+                        <p><strong>Amount:</strong> ETB ${data.amount}</p>
+                        <p><strong>Product:</strong> ${data.product}</p>
+                        <div class="payment-link">${result.link}</div>
+                        <a href="${result.link}" target="_blank" class="open-link">🔄 Open Payment Page</a>
+                        <p style="margin-top: 10px; font-size: 14px; color: #666;">
+                            The customer can access this link directly or you can copy and share it manually.
+                        </p>
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+                        <h3>❌ Error Creating Payment Link</h3>
+                        <p>${result.message || 'Please try again later.'}</p>
+                    `;
+                }
+                
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <h3>❌ Network Error</h3>
+                    <p>Please check your internet connection and try again.</p>
+                    <p style="font-size: 14px; color: #666;">Error details: ${error.message}</p>
+                `;
+            } finally {
+                resultDiv.style.display = 'block';
+                loading.style.display = 'none';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generate Payment Link';
+            }
+        });
+
+        // Auto-generate order ID on page load
+        document.getElementById('order_id').value = 'ORDER_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+        
+        // Add some interactive effects
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#667eea';
+                this.style.boxShadow = '0 0 5px rgba(102, 126, 234, 0.3)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.borderColor = '#ddd';
+                this.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
