@@ -83,10 +83,10 @@ class YagoutPaySDK:
             return {"status": "error", "message": f"Unexpected error: {str(e)}"}
 
 if __name__ == "__main__":
-    sdk = YagoutPaySDK("202508080001", "IG3CNW5uNrUO2mU2htUOWb9rgXCF7XMAXmL63d7wNZo=")
+    sdk = YagoutPaySDK("me id", "aes key")
     dynamic_payload = {
         "req_user_id": "yagou381",
-        "me_id": "202508080001",
+        "me_id": "your me id",
         "amount": "500",
         "customer_email": "",
         "mobile_no": "0909260339",
