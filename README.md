@@ -29,8 +29,8 @@ Uses AES-256-CBC with a 32-byte key and static IV (`0123456789abcdef`) for secur
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/Liladet/yagoutpay-dynamic-payment-sdk.git
-   cd yagoutpay-dynamic-payment-sdk
+   git clone https://github.com/Liladet/yagoutpay-static-and-dynamic-sdk.git
+   cd yagoutpay-static-and-dynamic-sdk
 
 
 - Install Dependencies
