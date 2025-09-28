@@ -72,7 +72,7 @@ payload = {
     "ag_code": "",
     "ag_name": "",
     "req_user_id": "yagou381",
-    "me_code": "202508080001",
+    "me_code": "me_id",
     "me_name": "",
     "qr_code_id": "",
     "brandName": "Lidiya",
@@ -102,7 +102,7 @@ payload = {
 payload_json = json.dumps(payload)
 
 # Step 2: Encrypt payload
-key_b64 = "IG3CNW5uNrUO2mU2htUOWb9rgXCF7XMAXmL63d7wNZo="  # Replace with actual key
+key_b64 = "aes key"  # Replace with actual key
 try:
     encrypted_payload = encrypt(payload_json, key_b64)
     print("Encrypted payload:", encrypted_payload)
@@ -112,10 +112,10 @@ except Exception as e:
     exit()
 
 # Step 3: Send API request
-url = "https://uatcheckout.yagoutpay.com/ms-transaction-core-1-0/sdk/staticQRPaymentResponse"
+url = "yagoutpay url"
 headers = {
     "Content-Type": "application/json",
-    "me_id": "202508080001"
+    "me_id": "your meid"
 }
 try:
     # Disable SSL verification for UAT (remove in production)
